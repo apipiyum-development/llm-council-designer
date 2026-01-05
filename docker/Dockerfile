@@ -39,17 +39,38 @@ COPY --from=frontend-builder /app/dist /app/dist
 FROM python:3.11-alpine AS production
 
 # Установка nginx и необходимых утилит
-RUN apk add --no-cache nginx && \
+RUN apk add --no-cache nginx supervisor && \
     # Создание директории для статических файлов
     mkdir -p /usr/share/nginx/html && \
     # Создание директории для конфигурации nginx
-    mkdir -p /etc/nginx/conf.d
+    mkdir -p /etc/nginx/conf.d && \
+    # Создание директории для конфигурации supervisor
+    mkdir -p /etc/supervisor/conf.d
 
 WORKDIR /app
 
 # Копируем конфигурацию Nginx
-RUN rm -f /etc/nginx/conf.d/default.conf
-COPY docker/nginx.conf /etc/nginx/conf.d/
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Копируем конфигурацию Supervisor
+RUN echo "[supervisord]\n\
+nodaemon=true\n\
+user=root\n\
+\n\
+[program:nginx]\n\
+command=/usr/sbin/nginx -g \"daemon off;\"\n\
+priority=1\n\
+\n\
+[program:uvicorn]\n\
+command=python -m uvicorn main:app --host 0.0.0.0 --port 8000\n\
+priority=2\n\
+directory=/app\n\
+autorestart=true\n\
+redirect_stderr=true\n\
+stdout_logfile=/var/log/uvicorn.log\n\
+\n\
+[group:web]\n\
+programs=nginx,uvicorn" > /etc/supervisor/conf.d/supervisord.conf
 
 # Копируем собранный фронтенд
 COPY --from=frontend-builder /app/dist /usr/share/nginx/html
@@ -64,5 +85,5 @@ COPY services/.env /app/services/.env
 
 EXPOSE 3000 8000
 
-# Запуск nginx и uvicorn одновременно
-CMD ["/bin/sh", "-c", "nginx && python -m uvicorn main:app --host 0.0.0.0 --port 8000"]
+# Запуск supervisor, который управляет nginx и uvicorn
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

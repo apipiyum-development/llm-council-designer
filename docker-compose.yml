@@ -13,7 +13,7 @@ services:
       - services/.env
     networks:
       - n8n_default
-    restart: always
+    restart: unless-stopped
     # Настройки безопасности
     security_opt:
       - no-new-privileges:true
