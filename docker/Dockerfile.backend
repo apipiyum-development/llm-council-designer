@@ -1,5 +1,5 @@
-# Финальный Dockerfile для LLM Council
-# Только nginx для раздачи статических файлов
+# Многоступенчатый Dockerfile для LLM Council Backend
+# Только бэкенд-сервер FastAPI
 
 # Stage 1: Сборка фронтенда
 FROM node:18-alpine AS frontend-builder
@@ -16,7 +16,7 @@ COPY . .
 # Собираем фронтенд
 RUN npm run build
 
-# Stage 2: Установка бэкенда (для доступа к собранному фронтенду)
+# Stage 2: Установка бэкенда
 FROM python:3.11-alpine AS backend
 
 WORKDIR /app
@@ -35,16 +35,26 @@ COPY . .
 # Копируем собранный фронтенд из предыдущего этапа
 COPY --from=frontend-builder /app/dist /app/dist
 
-# Stage 3: Финальный образ только с nginx
-FROM nginx:alpine
+# Финальный образ
+FROM python:3.11-alpine AS production
 
-# Копируем собранную frontend-сборку в корневую директорию nginx
-COPY --from=frontend-builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Копируем конфигурацию nginx
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+# Установка системных зависимостей
+RUN apk add --no-cache gcc musl-dev
 
-EXPOSE 3000
+# Установка зависимостей Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Запуск nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Копируем исходный код бэкенда
+COPY . .
+
+# Копируем собранный фронтенд из предыдущего этапа
+COPY --from=backend /app/dist /app/dist
+
+EXPOSE 8000
+
+# Запуск uvicorn
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,4 +1,4 @@
-# Финальный Dockerfile для LLM Council
+# Финальный Dockerfile для LLM Council Frontend
 # Только nginx для раздачи статических файлов
 
 # Stage 1: Сборка фронтенда
@@ -44,7 +44,7 @@ COPY --from=frontend-builder /app/dist /usr/share/nginx/html
 # Копируем конфигурацию nginx
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
+EXPOSE 300
 
 # Запуск nginx
 CMD ["nginx", "-g", "daemon off;"]

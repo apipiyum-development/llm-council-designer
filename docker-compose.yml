@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  llm-council:
+  llm-council-backend:
     build:
       context: .
-      dockerfile: docker/Dockerfile
-    container_name: llm-council
+      dockerfile: docker/Dockerfile.backend
+    container_name: llm-council-backend
     environment:
       - NODE_ENV=production
     env_file:
@@ -26,21 +26,10 @@ services:
         reservations:
           memory: 512M
           cpus: '0.5'
-    # Labels для traefik
+    # Labels для traefik API
     labels:
-      # Основной роут для фронтенда
-      - "traefik.enable=true"
-      - "traefik.http.routers.llm-council.rule=Host(`llm.clusterdev.ru`)"
-      - "traefik.http.routers.llm-council.entrypoints=web,websecure"
-      - "traefik.http.routers.llm-council.tls=true"
-      - "traefik.http.routers.llm-council.tls.certresolver=mytlschallenge"
-      - "traefik.http.routers.llm-council.service=llm-council-service"
-      
-      # Настройки для сервиса фронтенда
-      - "traefik.http.services.llm-council-service.loadbalancer.server.port=3000"
-      - "traefik.http.services.llm-council-service.loadbalancer.server.scheme=http"
-      
       # Роут для API (включая SSE endpoint)
+      - "traefik.enable=true"
       - "traefik.http.routers.llm-council-api.rule=Host(`llm.clusterdev.ru`) && PathPrefix(`/council`)"
       - "traefik.http.routers.llm-council-api.entrypoints=web,websecure"
       - "traefik.http.routers.llm-council-api.tls=true"
@@ -54,6 +43,42 @@ services:
       
       # Особые настройки для обработки SSE
       - "traefik.http.services.llm-council-api-service.loadbalancer.responseforwarding.flushinterval=100ms"
+
+  llm-council-frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: llm-council-frontend
+    depends_on:
+      - llm-council-backend
+    networks:
+      - n8n_default
+    restart: unless-stopped
+    # Настройки безопасности
+    security_opt:
+      - no-new-privileges:true
+    # Ограничения ресурсов
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    # Labels для traefik фронтенда
+    labels:
+      # Основной роут для фронтенда
+      - "traefik.enable=true"
+      - "traefik.http.routers.llm-council.rule=Host(`llm.clusterdev.ru`)"
+      - "traefik.http.routers.llm-council.entrypoints=web,websecure"
+      - "traefik.http.routers.llm-council.tls=true"
+      - "traefik.http.routers.llm-council.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.llm-council.service=llm-council-service"
+      
+      # Настройки для сервиса фронтенда
+      - "traefik.http.services.llm-council-service.loadbalancer.server.port=3000"
+      - "traefik.http.services.llm-council-service.loadbalancer.server.scheme=http"
 
 networks:
   n8n_default:
