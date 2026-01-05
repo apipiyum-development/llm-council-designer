@@ -211,9 +211,9 @@ const App: React.FC = () => {
             {/* Hero Image - Совет нейросетей */}
             <div className="w-full max-w-4xl mx-auto my-8">
               <img
-                src="/src/assets/hero/ready_consil.jpg"
+                src="/assets/hero/ready_consil.jpg"
                 alt="Совет нейросетей - коллективный разум"
-                className="w-full h-auto rounded-xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02] border border-purple-500/20"
+                className="w-full h-auto rounded-xl shadow-2xl hover:shadow-purple-50/20 transition-all duration-300 hover:scale-[1.02] border border-purple-500/20"
               />
             </div>
 
