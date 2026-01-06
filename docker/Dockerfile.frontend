@@ -10,8 +10,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Копируем исходный код фронтенда
+# Копируем остальные исходные файлы
 COPY . .
+
+# Устанавливаем и настраиваем Tailwind CSS
+RUN npm install -D tailwindcss postcss autoprefixer
+RUN npx tailwindcss init -p
 
 # Собираем фронтенд
 RUN npm run build

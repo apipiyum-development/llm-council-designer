@@ -179,7 +179,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 w-full p-8 md:p-12 flex justify-between items-center z-50">
+      <header className="absolute top-0 left-0 w-full p-4 sm:p-6 md:p-12 flex flex-col sm:flex-row justify-between items-center gap-4 z-50">
         <div className="opacity-60 hover:opacity-100 transition-opacity duration-700">
           {CREOMATICA_LOGO}
         </div>
@@ -192,11 +192,11 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      <main className="relative z-20 h-full flex flex-col items-center justify-center px-6">
+      <main className="relative z-20 h-full flex flex-col items-center justify-center px-4 sm:px-6">
         
         {/* IDLE: Initial State */}
         {state.stage === DeliberationStage.IDLE && (
-          <div className="w-full max-w-5xl flex flex-col items-center gap-16 content-enter">
+          <div className="w-full max-w-5xl flex flex-col items-center gap-8 sm:gap-16 content-enter">
             
             <div className="text-center space-y-5">
               <h1 className="text-3xl md:text-5xl font-light tracking-[-0.03em] uppercase text-gradient-council">
@@ -209,7 +209,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Hero Image - Совет нейросетей */}
-            <div className="w-full max-w-4xl mx-auto my-8">
+            <div className="w-full max-w-4xl mx-auto my-4 sm:my-8">
               <img
                 src="/assets/hero/ready_consil.jpg"
                 alt="Совет нейросетей - коллективный разум"
@@ -226,12 +226,12 @@ const App: React.FC = () => {
                   value={state.query}
                   onChange={(e) => setState(prev => ({ ...prev, query: e.target.value }))}
                   placeholder="Задайте свой вопрос Высшему Совету..."
-                  className="w-full bg-transparent border-b border-white/10 px-0 py-8 text-2xl md:text-4xl font-light text-center focus:outline-none focus:border-purple-500/40 transition-all duration-1000 placeholder:text-white/10 text-white/90 selection:bg-purple-500/20"
+                  className="w-full bg-transparent border-b border-white/10 px-0 py-4 sm:py-8 text-lg sm:text-2xl md:text-4xl font-light text-center focus:outline-none focus:border-purple-500/40 transition-all duration-1000 placeholder:text-white/10 text-white/90 selection:bg-purple-500/20"
                 />
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-purple-500 group-focus-within:w-full transition-all duration-1000 opacity-40" />
               </div>
               
-              <div className={`flex flex-col items-center gap-6 transition-all duration-1000 ${state.query.trim() ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+              <div className={`flex flex-col items-center gap-4 sm:gap-6 transition-all duration-1000 ${state.query.trim() ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
                 <button 
                   type="submit"
                   className="btn-enter-elegant px-16 py-4 rounded-full text-[12px] tracking-[0.2em] uppercase font-bold flex items-center gap-4"
@@ -247,10 +247,10 @@ const App: React.FC = () => {
 
         {/* ACTIVE: Deliberation Stages */}
         {state.stage !== DeliberationStage.IDLE && (
-          <div className="w-full h-full pt-44 pb-20 flex flex-col items-center gap-14 overflow-hidden content-enter">
+          <div className="w-full h-full pt-24 sm:pt-44 pb-8 sm:pb-20 flex flex-col items-center gap-8 sm:gap-14 overflow-hidden content-enter">
             
             {/* Step Indicators */}
-            <nav className="flex items-center gap-4 md:gap-14 shrink-0 z-30">
+            <nav className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-14 shrink-0 z-30">
               {STAGES.map((s) => {
                 const isActiveStage = viewStage === s.value;
                 const isReached = STAGES.findIndex(x => x.value === state.stage) >= STAGES.findIndex(x => x.value === s.value);
@@ -281,7 +281,7 @@ const App: React.FC = () => {
 
               {/* Grid of Model Responses */}
               {(viewStage === DeliberationStage.STAGE_1 || viewStage === DeliberationStage.STAGE_2) && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full animate-[contentIn_1s_ease-out]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 w-full animate-[contentIn_1s_ease-out]">
                   {MODELS.map((m) => {
                     const opinion = state.opinions.find(o => o.name.toUpperCase() === m.name);
                     const review = state.reviews.find(r => r.name.toUpperCase() === m.name);
@@ -317,7 +317,7 @@ const App: React.FC = () => {
 
               {/* Final Consensus Block */}
               {viewStage === DeliberationStage.STAGE_3 && (
-                <div className="w-full max-w-5xl glass p-14 md:p-28 rounded-[4px] space-y-16 animate-[contentIn_1s_ease-out] relative">
+                <div className="w-full max-w-5xl glass p-6 sm:p-14 md:p-28 rounded-[4px] space-y-8 sm:space-y-16 animate-[contentIn_1s_ease-out] relative">
                   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
                   
                   <div className="flex flex-col items-center gap-8">
@@ -325,7 +325,7 @@ const App: React.FC = () => {
                     <div className="h-[1px] w-20 bg-purple-500/30" />
                   </div>
                   
-                  <div className="text-xl md:text-3xl font-light leading-relaxed text-center text-white/90 selection:bg-purple-500/30 tracking-tight max-w-4xl mx-auto">
+                  <div className="text-base sm:text-xl md:text-3xl font-light leading-relaxed text-center text-white/90 selection:bg-purple-500/30 tracking-tight max-w-4xl mx-auto">
                     <div className="markdown-content">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {state.consensus || 'Синтез финального решения...'}
@@ -352,13 +352,13 @@ const App: React.FC = () => {
                         </button>
                       </div>
 
-                      <button 
+                      <button
                         onClick={reset}
-                        className="text-[11px] tracking-[1.2em] uppercase text-white/20 hover:text-white transition-all duration-1000 flex items-center gap-16 group"
+                        className="text-[9px] sm:text-[11px] tracking-[0.8em] sm:tracking-[1.2em] uppercase text-white/20 hover:text-white transition-all duration-1000 flex items-center gap-8 sm:gap-16 group"
                       >
-                        <span className="w-20 h-[1px] bg-white/5 group-hover:bg-purple-500/40 group-hover:w-40 transition-all duration-1000" />
+                        <span className="w-12 sm:w-20 h-[1px] bg-white/5 group-hover:bg-purple-500/40 group-hover:w-24 sm:group-hover:w-40 transition-all duration-1000" />
                         Новый Протокол
-                        <span className="w-20 h-[1px] bg-white/5 group-hover:bg-purple-500/40 group-hover:w-40 transition-all duration-1000" />
+                        <span className="w-12 sm:w-20 h-[1px] bg-white/5 group-hover:bg-purple-500/40 group-hover:w-24 sm:group-hover:w-40 transition-all duration-1000" />
                       </button>
                     </div>
                   )}
@@ -370,13 +370,13 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="absolute bottom-0 left-0 w-full p-10 flex justify-between items-end pointer-events-none z-10 font-mono opacity-20">
-        <div className="text-[10px] tracking-[0.6em] text-white uppercase flex items-center gap-6">
-          <div className="w-12 h-[1px] bg-purple-500/40" />
+      <footer className="absolute bottom-0 left-0 w-full p-4 sm:p-10 flex flex-col sm:flex-row justify-between items-center sm:items-end pointer-events-none z-10 font-mono opacity-20 gap-4 sm:gap-0">
+        <div className="text-[8px] sm:text-[10px] tracking-[0.4em] sm:tracking-[0.6em] text-white uppercase flex items-center gap-4 sm:gap-6">
+          <div className="w-8 sm:w-12 h-[1px] bg-purple-500/40" />
           Protocol Stable // Sync 4.0.8
         </div>
-        <div className="text-[10px] tracking-[0.2em] text-white/70 uppercase text-right leading-relaxed hidden sm:block">
-          Объективное решение через<br/>синтез нейронных мнений
+        <div className="text-[8px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.2em] text-white/70 uppercase text-center sm:text-right leading-relaxed">
+          Объективное решение через<br className="hidden sm:block"/>синтез нейронных мнений
         </div>
       </footer>
     </div>

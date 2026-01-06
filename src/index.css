@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Дополнительные стили для приложения */
+.energy-vortex {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+ z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.energy-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(80px);
+  mix-blend-mode: screen;
+}
+
+.layer-1 { 
+  animation: rotate-vortex 20s linear infinite;
+  background: conic-gradient(from 0deg, transparent, var(--neon-purple), transparent, var(--neon-pink), transparent);
+  opacity: 0.3;
+}
+
+.layer-2 { 
+  animation: rotate-vortex 15s linear infinite reverse; 
+  background: conic-gradient(from 180deg, transparent, var(--neon-blue), transparent, var(--neon-purple), transparent);
+  transform: scale(1.2);
+  opacity: 0.2;
+}
+
+.layer-3 { 
+  animation: pulse-energy 4s ease-in-out infinite;
+ background: radial-gradient(circle at center, rgba(255,255,0.1) 0%, var(--neon-purple) 40%, transparent 70%);
+  opacity: 0.15;
+}
+
+@keyframes rotate-vortex {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-energy {
+  0%, 100% { transform: scale(0.9); opacity: 0.1; }
+  50% { transform: scale(1.1); opacity: 0.2; }
+}
+
+@keyframes contentIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glass {
+  background: rgba(15, 0, 30, 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(157, 0, 255, 0.15);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-enter-elegant {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(157, 0, 255, 0.3);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-enter-elegant:hover {
+  background: rgba(157, 0, 255, 0.1);
+  border-color: var(--neon-purple);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(157, 0, 255, 0.2);
+  letter-spacing: 0.3em;
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 2px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(157, 0, 255, 0.2);
+  border-radius: 10px;
+}
+
+.text-gradient-council {
+  background: linear-gradient(
+    to right, 
+    #ffffff 20%, 
+    var(--neon-purple) 50%, 
+    var(--neon-pink) 80%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flow-dynamic 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(157, 0, 255, 0.3));
+}
+
+@keyframes flow-dynamic {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .energy-vortex {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .pt-44 {
+    padding-top: 2rem;
+  }
+  
+  .pb-20 {
+    padding-bottom: 2rem;
+  }
+  
+  .max-w-5xl {
+    max-width: 90%;
+  }
+  
+  .max-w-4xl {
+    max-width: 95%;
+  }
+  
+  .max-w-3xl {
+    max-width: 95%;
+  }
+  
+  .max-w-7xl {
+    max-width: 95%;
+  }
+  
+  .p-12 {
+    padding: 1rem;
+  }
+  
+  .p-14 {
+    padding: 1rem;
+  }
+  
+  .p-28 {
+    padding: 2rem;
+  }
+  
+  .py-8 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+ }
+  
+  .px-16 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.5rem;
+ }
+  
+  .text-4xl {
+    font-size: 1.75rem;
+  }
+  
+  .text-5xl {
+    font-size: 2rem;
+  }
+  
+  .text-lg {
+    font-size: 1rem;
+  }
+  
+  .text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .gap-16 {
+    gap: 2rem;
+  }
+  
+  .gap-14 {
+    gap: 2rem;
+  }
+  
+  .gap-8 {
+    gap: 1rem;
+  }
+  
+  .p-8 {
+    padding: 1rem;
+  }
+  
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .hidden.md\:inline {
+    display: inline;
+  }
+  
+  .hidden.md\:grid {
+    display: grid;
+  }
+  
+  .hidden.sm\:block {
+    display: block;
+  }
+}
